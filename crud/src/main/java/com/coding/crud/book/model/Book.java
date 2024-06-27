@@ -2,44 +2,33 @@ package com.coding.crud.book.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
-@Getter
-@Setter
+@Builder
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Table(name="books")
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    private Long id;
 
     @Column(name= "title")
-    String title;
+    private String title;
 
     @Column(name = "author")
-    String author;
+    private String author;
 
     @Column(name = "price")
-    int price;
+    private int price;
 
     @Column(name = "quantity")
-    int quantity;
-
-    public Book(){
-
-    }
-
-    public Book(String title, String author, int price, int quantity){
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.quantity = quantity;
-    }
+    private int quantity;
 
     @Override
     public String toString() {

@@ -1,7 +1,8 @@
 package com.coding.crud.book.controller;
 
 
-import com.coding.crud.book.model.Book;
+import com.coding.crud.book.dto.BookRequest;
+import com.coding.crud.book.dto.BookResponse;
 import com.coding.crud.book.repository.BookRepository;
 import com.coding.crud.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +24,25 @@ public class BookController {
 
     //Create Method
     @PostMapping()
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    public ResponseEntity<BookResponse> createBook(@RequestBody BookRequest book) {
         return bookService.createBook(book);
     }
 
     //Read all Books
     @GetMapping()
-    public ResponseEntity<List<Book>> getBooks(){
+    public ResponseEntity<List<BookResponse>> getBooks(){
         return bookService.getBooks(null);
     }
 
     //Read specific book by title
     @GetMapping("/{title}")
-    public ResponseEntity<List<Book>> getBooks(@PathVariable String title){
+    public ResponseEntity<List<BookResponse>> getBooks(@PathVariable String title){
         return bookService.getBooks(title);
     }
 
     //Update Method
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable("id") Long id, @RequestBody Book book){
+    public ResponseEntity<BookResponse> updateBook(@PathVariable("id") Long id, @RequestBody BookRequest book){
         return bookService.updateBook(id, book);
     }
 
