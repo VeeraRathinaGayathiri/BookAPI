@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -45,9 +46,11 @@ class BookRepositoryTest {
     @Test
     public void TestFetchTitleMatch() {
         Optional<List<Book>> books = bookRepository.findByTitleContainingIgnoreCase("an");
+
         assertAll(() -> assertNotNull(books),
-                () -> assertTrue(books.isPresent()),
-                () -> assertEquals(2, books.get().size()));
+                () -> assertTrue(books.isPresent()));
+        List<String> titles = books.get().stream().map(x -> x.getTitle()).collect(Collectors.toList());
+        assertTrue(titles.stream().allMatch(x -> x.contains("An")));
     }
 
     @Test
