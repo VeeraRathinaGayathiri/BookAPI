@@ -28,7 +28,7 @@ public class BookController {
     }
 
     //Read all Books
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<Book>> getBooks(){
         return bookService.getBooks(null);
     }

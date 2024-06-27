@@ -14,6 +14,7 @@ import java.util.Optional;
 @Service
 public class BookService {
 
+
     @Autowired
     BookRepository bookRepository;
 
@@ -51,17 +52,6 @@ public class BookService {
         }catch (Exception exception){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public ResponseEntity<Book> getBook(Long id) {
-        try {
-            Optional<Book> bookData = bookRepository.findById(id);
-            if (bookData.isPresent())
-                return new ResponseEntity<>(bookData.get(), HttpStatus.OK);
-        }catch (Exception ex){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-     return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<Book> updateBook(Long id, Book book) {
