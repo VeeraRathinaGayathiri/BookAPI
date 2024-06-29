@@ -2,7 +2,7 @@ package com.coding.crud.book.service;
 
 import com.coding.crud.book.dto.BookRequest;
 import com.coding.crud.book.dto.BookResponse;
-import com.coding.crud.book.model.Book;
+import com.coding.crud.book.model.BookEntity;
 import com.coding.crud.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +21,10 @@ public class BookService {
     BookRepository bookRepository;
 
     public ResponseEntity<BookResponse> createBook(BookRequest book) {
-        Book newBook = mapToDto(book);
+        BookEntity newBook = mapToDto(book);
         try{
-            BookResponse response = mapToResponse(bookRepository.save(newBook));
+            BookEntity _book = bookRepository.save(newBook);
+            BookResponse response = mapToResponse(_book);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -36,7 +37,7 @@ public class BookService {
     This can be further extended by returning books closely matches with the title provided.
      */
     public ResponseEntity<List<BookResponse>> getBooks(String title) {
-        List<Book> books = new ArrayList<>();
+        List<BookEntity> books = new ArrayList<>();
         List<BookResponse> response = new ArrayList<>();
 
         try {
@@ -44,7 +45,7 @@ public class BookService {
                 bookRepository.findAll().forEach(books::add);
                 response = books.stream().map(this::mapToResponse).toList();
             } else {
-                Optional<List<Book>> booksData = bookRepository.findByTitleContainingIgnoreCase(title);
+                Optional<List<BookEntity>> booksData = bookRepository.findByTitleContainingIgnoreCase(title);
                 if(booksData.isPresent()){
                     booksData.get().forEach(books::add);
                     response = books.stream().map(this::mapToResponse).toList();
@@ -62,10 +63,10 @@ public class BookService {
     }
 
     public ResponseEntity<BookResponse> updateBook(Long id, BookRequest book) {
-       Optional<Book> bookData = bookRepository.findById(id);
+       Optional<BookEntity> bookData = bookRepository.findById(id);
        try {
            if (bookData.isPresent()) { //if data present in db update details
-               Book _book = Book.builder()
+               BookEntity _book = BookEntity.builder()
                        .id(bookData.get().getId())
                        .title(book.getTitle())
                        .author(book.getAuthor())
@@ -83,7 +84,7 @@ public class BookService {
     }
 
     public ResponseEntity<HttpStatus> deleteBook(Long id) {
-        Optional<Book> bookData = bookRepository.findById(id);
+        Optional<BookEntity> bookData = bookRepository.findById(id);
         try {
             if (bookData.isPresent()) {
                 bookRepository.deleteById(id);
@@ -94,7 +95,7 @@ public class BookService {
         }
     }
 
-    private BookResponse mapToResponse(Book book){
+    private BookResponse mapToResponse(BookEntity book){
         return BookResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())
@@ -104,8 +105,8 @@ public class BookService {
                 .build();
     }
 
-    private Book mapToDto(BookRequest book){
-        return Book.builder()
+    private BookEntity mapToDto(BookRequest book){
+        return BookEntity.builder()
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .price(book.getPrice())
