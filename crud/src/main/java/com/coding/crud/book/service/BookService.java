@@ -63,6 +63,7 @@ public class BookService {
     }
 
     public ResponseEntity<BookResponse> updateBook(Long id, BookRequest book) {
+        // chexk with sudha why can't we use save directly which does upsert.
        Optional<BookEntity> bookData = bookRepository.findById(id);
        try {
            if (bookData.isPresent()) { //if data present in db update details
